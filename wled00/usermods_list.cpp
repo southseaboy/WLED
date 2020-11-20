@@ -15,6 +15,10 @@
 #endif
 //#include "usermod_v2_empty.h"
 
+// enabled touchbrightness usermod for ESP32 ** CR
+#include "usermod_touchbrightness.h"
+
+
 void registerUsermods()
 {
   /*
@@ -27,4 +31,8 @@ void registerUsermods()
   usermods.add(new UsermodTemperature());
   #endif
   //usermods.add(new UsermodRenameMe());
+
+// enabled touchbrightness usermod for ESP32 ** CR
+  usermods.add(new TouchBrightnessControl());
+
 }

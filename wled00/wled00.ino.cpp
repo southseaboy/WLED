@@ -10,7 +10,8 @@
  * Usermod compatibility: Existing wled06_usermod.ino mods should continue to work. Delete usermod.cpp.
  * New usermods should use usermod.cpp instead.
  */
-#include "wled.h"
+
+#include <wled.h>
 
 void setup() {
   WLED::instance().setup();
