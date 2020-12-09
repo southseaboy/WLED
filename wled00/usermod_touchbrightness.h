@@ -118,7 +118,7 @@ class TouchBrightnessControl : public Usermod {
            if(presetIndex > 8) {
              presetIndex = 1;
            }
-          applyPreset(presetIndex, true);
+          applyPreset(presetIndex);
           colorUpdated(2);
         }  
 
