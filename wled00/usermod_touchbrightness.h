@@ -11,6 +11,11 @@
 //  to include 2nd touch pin for preset cycling
 //  unsure of JK's license conditions so will not publish this
 //
+//  further small mod on 12/12/2020 to include a reset following initial power up
+//   - this is to fix a problem with the digital mic, that does not work correctly unless reset
+//     sometime after power up - assuming that wifi has nothing to do with the issue!!
+//     pwr is connected to an adc pin with an RC delay - the mod checks for the voltage 
+//     having reached the stable state - if not wait 1.5 secs then reset 
 
 #pragma once
 
@@ -27,6 +32,7 @@
 #define brightness4 204
 #define brightness5 255
 
+#define adcPin A6                       // pin used for adc input - will use ADC0 - channel 6 on GPIO34
 
 #ifdef ESP32
 
@@ -47,11 +53,21 @@ class TouchBrightnessControl : public Usermod {
     uint16_t touchReading1 = 0;          //sensor reading, maybe use uint8_t???
     uint16_t touchDuration1 = 0;         //duration of last touch1
  
+    const uint16_t pwrCheckLevel = 4000;   // arbitrary value - will be used a proxy for some voltage < fully on
     uint16_t presetIndex = 0;
+    uint16_t voltage = 0;
  
   public:
   
     void setup() {
+      voltage = analogRead(adcPin);        // assume initially that this code will run with 0.25 sec of power up
+      Serial.println(voltage);
+      if (voltage < pwrCheckLevel) {
+        delay(1500);
+        ESP.restart();
+      }
+
+
       lastTouch0 = millis();
       lastRelease0 = millis();
       lastTime = millis();
